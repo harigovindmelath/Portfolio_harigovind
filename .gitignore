@@ -1,0 +1,5 @@
+node_modules/
+artifacts/portfolio/node_modules/
+artifacts/portfolio/dist/
+*.log
+package-lock.json
