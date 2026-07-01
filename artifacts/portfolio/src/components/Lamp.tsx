@@ -14,7 +14,7 @@ export function LampContainer({ children, className }: LampContainerProps) {
         className,
       )}
     >
-      <div className="relative isolate z-0 flex w-full flex-1 scale-y-125 items-center justify-center">
+      <div className="relative isolate z-0 flex w-full flex-1 -translate-y-32 scale-y-125 items-center justify-center">
         <motion.div
           initial={{ opacity: 0.5, width: '15rem' }}
           whileInView={{ opacity: 1, width: '30rem' }}
