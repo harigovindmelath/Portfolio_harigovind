@@ -7,7 +7,7 @@ const educationData = [
   {
     id: '1',
     title: 'B.Tech in Artificial Intelligence and Machine Learning',
-    description: 'YOUR_COLLEGE_NAME — 2022 to 2026',
+    description: 'Vel Tech Rangarajan Dr.Sagunthala R&D Institute of Science and Technology Chennai — 2022 to 2026',
     timestamp: '2026',
     status: 'active' as const,
     icon: <GraduationCap className="h-3 w-3" />,
