@@ -1,40 +1,61 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { IconCloud } from '@/components/IconCloud'
-import { sectionClass, cn } from '@/lib/utils'
+import { sectionClass } from '@/lib/utils'
 
-// Icon cloud — react-icon-cloud / simple-icons npm slugs
+// Icon cloud slugs (simple-icons npm)
 const iconCloudSlugs = [
-  'python', 'java', 'html5', 'css3', 'c',
-  'openai', 'huggingface', 'pytorch', 'tensorflow', 'scikitlearn',
-  'opencv', 'numpy', 'pandas', 'anaconda', 'fastapi',
-  'flask', 'django', 'git', 'github',
-  'linux', 'jupyter', 'googlecolab', 'mysql',
-  'sqlite', 'amazonwebservices',
+  'python', 'java', 'c', 'html5', 'css3',
+  'pytorch', 'tensorflow', 'keras', 'scikitlearn', 'opencv', 'numpy', 'pandas',
+  'fastapi', 'django', 'flask', 'springboot', 'jsonwebtokens', 'hibernate',
+  'mysql', 'sqlite',
+  'docker', 'git', 'github', 'linux', 'railway', 'amazonwebservices',
 ]
 
-// Right-panel grid
-const skillGrid: Array<{ slug: string; name: string }> = [
-  { slug: 'python',            name: 'Python'       },
-  { slug: 'java',              name: 'Java'         },
-  { slug: 'html5',             name: 'HTML5'        },
-  { slug: 'css3',              name: 'CSS3'         },
-  { slug: 'c',                 name: 'C'            },
-  { slug: 'pytorch',           name: 'PyTorch'      },
-  { slug: 'tensorflow',        name: 'TensorFlow'   },
-  { slug: 'scikitlearn',       name: 'Scikit-learn' },
-  { slug: 'opencv',            name: 'OpenCV'       },
-  { slug: 'numpy',             name: 'NumPy'        },
-  { slug: 'pandas',            name: 'Pandas'       },
-  { slug: 'fastapi',           name: 'FastAPI'      },
-  { slug: 'django',            name: 'Django'       },
-  { slug: 'flask',             name: 'Flask'        },
-  { slug: 'mysql',             name: 'MySQL'        },
-  { slug: 'sqlite',            name: 'SQLite'       },
-  { slug: 'git',               name: 'Git'          },
-  { slug: 'github',            name: 'GitHub'       },
-  { slug: 'linux',             name: 'Linux'        },
-  { slug: 'amazonwebservices', name: 'AWS'          },
+// Visual groups — no headings, just ordered clusters with spacing between them
+const skillGroups: Array<Array<{ slug: string; name: string }>> = [
+  // Languages
+  [
+    { slug: 'python',            name: 'Python'    },
+    { slug: 'java',              name: 'Java'      },
+    { slug: 'c',                 name: 'C'         },
+    { slug: 'html5',             name: 'HTML5'     },
+    { slug: 'css3',              name: 'CSS3'      },
+  ],
+  // ML / AI / Data
+  [
+    { slug: 'pytorch',           name: 'PyTorch'      },
+    { slug: 'tensorflow',        name: 'TensorFlow'   },
+    { slug: 'keras',             name: 'Keras'        },
+    { slug: 'scikitlearn',       name: 'Scikit-learn' },
+    { slug: 'opencv',            name: 'OpenCV'       },
+    { slug: 'numpy',             name: 'NumPy'        },
+    { slug: 'pandas',            name: 'Pandas'       },
+  ],
+  // Backend & Frameworks
+  [
+    { slug: 'fastapi',           name: 'FastAPI'       },
+    { slug: 'django',            name: 'Django'        },
+    { slug: 'flask',             name: 'Flask'         },
+    { slug: 'springboot',        name: 'Spring Boot'   },
+    { slug: 'springsecurity',    name: 'Spr. Security' },
+    { slug: 'hibernate',         name: 'Hibernate'     },
+    { slug: 'jsonwebtokens',     name: 'JWT'           },
+  ],
+  // Databases
+  [
+    { slug: 'mysql',             name: 'MySQL'   },
+    { slug: 'sqlite',            name: 'SQLite'  },
+  ],
+  // DevOps & Tools
+  [
+    { slug: 'docker',            name: 'Docker'  },
+    { slug: 'git',               name: 'Git'     },
+    { slug: 'github',            name: 'GitHub'  },
+    { slug: 'linux',             name: 'Linux'   },
+    { slug: 'railway',           name: 'Railway' },
+    { slug: 'amazonwebservices', name: 'AWS'     },
+  ],
 ]
 
 /** Fetches and inlines a Simple Icons SVG so CSS can colour it. */
@@ -55,7 +76,6 @@ function SkillIcon({ slug, name }: { slug: string; name: string }) {
   }, [slug])
 
   if (failed) {
-    // Two-letter pill — always visible, never broken
     return (
       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">
         {name.slice(0, 2).toUpperCase()}
@@ -67,11 +87,6 @@ function SkillIcon({ slug, name }: { slug: string; name: string }) {
     return <span className="h-8 w-8 animate-pulse rounded bg-muted" />
   }
 
-  /**
-   * Replace any fill that is "near-black" (R,G,B all ≤ 40) or "near-white"
-   * (R,G,B all ≥ 215) with `currentColor` so the icon adapts to the theme.
-   * Coloured brand fills (Python yellow, PyTorch red …) are left untouched.
-   */
   function adaptFills(raw: string): string {
     return raw.replace(/fill="#([0-9a-fA-F]{6})"/g, (_match, hex) => {
       const r = parseInt(hex.slice(0, 2), 16)
@@ -91,6 +106,15 @@ function SkillIcon({ slug, name }: { slug: string; name: string }) {
       // biome-ignore lint: intentional SVG inject from trusted Simple Icons CDN
       dangerouslySetInnerHTML={{ __html: styled }}
     />
+  )
+}
+
+function SkillCard({ slug, name }: { slug: string; name: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 rounded-lg border border-border bg-card/60 p-3 text-center backdrop-blur-sm transition-all duration-200 hover:border-primary/50 hover:shadow-md aspect-square">
+      <SkillIcon slug={slug} name={name} />
+      <span className="text-xs font-medium leading-tight text-muted-foreground">{name}</span>
+    </div>
   )
 }
 
@@ -120,7 +144,7 @@ export function Skills() {
             <IconCloud iconSlugs={iconCloudSlugs} />
           </motion.div>
 
-          {/* Right — named skill cards */}
+          {/* Right — grouped skill cards */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -129,16 +153,8 @@ export function Skills() {
             className="w-full lg:w-1/2"
           >
             <div className="grid grid-cols-4 gap-3 sm:grid-cols-5">
-              {skillGrid.map((skill) => (
-                <div
-                  key={skill.slug}
-                  className="flex flex-col items-center justify-center gap-2 rounded-lg border border-border bg-card/60 p-3 text-center backdrop-blur-sm transition-all duration-200 hover:border-primary/50 hover:shadow-md"
-                >
-                  <SkillIcon slug={skill.slug} name={skill.name} />
-                  <span className="text-xs font-medium leading-tight text-muted-foreground">
-                    {skill.name}
-                  </span>
-                </div>
+              {skillGroups.flat().map((skill) => (
+                <SkillCard key={skill.slug} slug={skill.slug} name={skill.name} />
               ))}
             </div>
           </motion.div>
