@@ -134,7 +134,7 @@ export function ProjectCard({ project, onCardClick }: ProjectCardProps) {
       role="button"
       tabIndex={0}
       className={cn(
-        'flex cursor-pointer flex-col overflow-hidden rounded-lg border border-border bg-card/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl',
+        'flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-border bg-card/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl',
       )}
     >
       <div className="flex flex-grow flex-col p-6">
