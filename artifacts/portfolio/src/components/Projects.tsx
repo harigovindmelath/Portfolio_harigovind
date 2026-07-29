@@ -23,6 +23,38 @@ const projects: Project[] = [
     githubLink: 'https://github.com/harigovindmelath/Adaptive-Knowledge-Intelligence-System',
   },
   {
+    id: 'trackhire',
+    title: 'TrackHire',
+    badge: 'Featured',
+    description:
+      'A Spring Boot REST API that streamlines job application tracking from pasted job descriptions to final offers. Uses an LLM to extract structured job details, supports JWT-based authentication, and enables users to manage applications through every stage of the hiring process.',
+    image: '',
+    tags: ['Java', 'Spring Boot', 'JWT', 'MySQL', 'Groq API', 'Docker'],
+    details: [
+      'Built a Spring Boot REST API with Spring Security and JWT-based authentication for secure multi-user job tracking.',
+      'Integrated Groq API to automatically extract structured job details (role, company, tech stack, deadlines) from raw pasted job descriptions.',
+      'Modelled the full application lifecycle — Applied, Interviewed, Offered, Rejected — with status transitions and filtering endpoints.',
+      'Persisted data with Spring Data JPA and Hibernate backed by MySQL, containerised with Docker, and deployed to Railway.',
+    ],
+    githubLink: 'https://github.com/harigovindmelath/TrackHire',
+  },
+  {
+    id: 'water-leak',
+    title: 'Real-Time Water Leak Detection System',
+    badge: 'IEEE Published',
+    description:
+      'IoT-powered water monitoring system using flow sensors and an LSTM Autoencoder to detect abnormal water usage and potential leaks in real time. Built with Flask, REST APIs, and a live monitoring dashboard. Presented at IEEE IDCIoT 2026.',
+    image: '',
+    tags: ['Python', 'Flask', 'LSTM', 'TensorFlow', 'IoT', 'REST API'],
+    details: [
+      'Designed an LSTM Autoencoder trained on normal water-flow patterns to flag anomalous usage that indicates leaks, without requiring labelled fault data.',
+      'Built IoT sensor integration for real-time flow data ingestion, preprocessing, and windowed model inference on a Raspberry Pi-class device.',
+      'Exposed a Flask REST API with live monitoring endpoints consumed by a dashboard showing usage trends and active alerts.',
+      'Research published and presented at IEEE International Conference IDCIoT 2026 (DOI: 10.1109/IDCIoT67589.2026.11455854).',
+    ],
+    githubLink: 'https://github.com/harigovindmelath/Smart-Water-Leak-Detection-System-IoT-LSTM-Flask-',
+  },
+  {
     id: 'violence-detection',
     title: 'Real-Time Violence Detection System',
     badge: 'Featured',
@@ -71,56 +103,10 @@ const projects: Project[] = [
     githubLink:
       'https://github.com/harigovindmelath/Motion-Detection-and-Alert-System-with-Image-Capture-and-Email-Notifications',
   },
-  {
-    id: 'cyberbullying',
-    title: 'Cyberbullying Tweets Classifier',
-    badge: '',
-    description:
-      'NLP classification pipeline using TF-IDF vectorization and Random Forest for cyberbullying detection across tweet datasets. Applied NLP for content moderation use cases.',
-    image: '',
-    tags: ['Python', 'NLP', 'Scikit-learn', 'TF-IDF'],
-    details: [
-      'Built a text classification pipeline with TF-IDF vectorization and a Random Forest classifier trained on labeled tweet datasets.',
-      'Performed data cleaning, tokenization, stopword removal, and feature extraction as preprocessing steps.',
-      'Evaluated model performance with precision, recall, and F1 metrics across cyberbullying categories.',
-      'Demonstrated applied NLP for content moderation with strong baseline results on public datasets.',
-    ],
-    githubLink: 'https://github.com/harigovindmelath/CyberBulllying-Tweets-Classifier',
-  },
-  {
-    id: 'book-management',
-    title: 'Book Management System',
-    badge: '',
-    description:
-      'Spring Boot CRUD application for managing books and authors with a clean REST API, demonstrating solid backend fundamentals and Java web development patterns.',
-    image: '',
-    tags: ['Java', 'Spring Boot', 'REST API', 'CRUD'],
-    details: [
-      'Built a full CRUD REST API using Spring Boot for managing a library of books and their associated authors.',
-      'Implemented standard HTTP method conventions (GET, POST, PUT, DELETE) with proper request and response handling.',
-      'Structured the project with layered architecture separating controllers, services, and repositories for maintainability.',
-      'Demonstrated core Java backend skills including dependency injection, JPA entity mapping, and RESTful API design.',
-    ],
-    githubLink: 'https://github.com/harigovindmelath/Book_Management_System_Java',
-  },
 ]
 
-const INITIAL_COUNT = 4
-
 export function Projects() {
-  const [showAll, setShowAll] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-
-  const visibleProjects = showAll ? projects : projects.slice(0, INITIAL_COUNT)
-
-  const handleShowMore = () => {
-    if (showAll) {
-      setShowAll(false)
-    } else {
-      // After showing all 6, further clicks go to GitHub
-      setShowAll(true)
-    }
-  }
 
   return (
     <section id="projects" className={`${sectionClass} relative`}>
@@ -136,13 +122,14 @@ export function Projects() {
         </motion.h2>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {visibleProjects.map((project) => (
+          {projects.map((project, i) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ delay: i * 0.05, duration: 0.5 }}
+              className="h-full"
             >
               <ProjectCard project={project} onCardClick={() => setSelectedProject(project)} />
             </motion.div>
@@ -153,35 +140,16 @@ export function Projects() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-10 flex flex-col items-center gap-3"
+          className="mt-10 text-center"
         >
-          {!showAll ? (
-            <button
-              type="button"
-              onClick={() => setShowAll(true)}
-              className="transform rounded-lg border border-border bg-background px-8 py-3 font-semibold transition-all hover:scale-105 hover:border-primary hover:text-primary"
-            >
-              Show More
-            </button>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={() => setShowAll(false)}
-                className="transform rounded-lg border border-border bg-background px-8 py-3 font-semibold transition-all hover:scale-105 hover:border-primary hover:text-primary"
-              >
-                Show Less
-              </button>
-              <a
-                href={GITHUB_REPOS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground hover:text-primary hover:underline"
-              >
-                View all repositories on GitHub →
-              </a>
-            </>
-          )}
+          <a
+            href={GITHUB_REPOS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block transform rounded-lg border border-border bg-background px-8 py-3 font-semibold transition-all hover:scale-105 hover:border-primary hover:text-primary"
+          >
+            Check Out More
+          </a>
         </motion.div>
       </div>
 
